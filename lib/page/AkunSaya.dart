@@ -28,8 +28,8 @@ class _AkunSayaState extends State<AkunSaya> {
 
   int _currentIndex = 0;
   var nama = "";
-  var alamat = "";
-  var no_hp = "";
+  var alamat = "-";
+  var no_hp = "-";
 
   @override
   void initState() {
@@ -166,9 +166,9 @@ class _AkunSayaState extends State<AkunSaya> {
     print("DATA $dataProfil");
 
 
-    nama = dataProfil["klinik"]["nama_klinik"];
-    alamat = dataProfil["klinik"]["alamat"];
-    no_hp = dataProfil["klinik"]["no_hp"];
+    nama = dataProfil["nama"];
+    // alamat = dataProfil["alamat"];
+    // no_hp = dataProfil["no_hp"];
 
     setState(() {});
   }

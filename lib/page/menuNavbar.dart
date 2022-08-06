@@ -10,5 +10,6 @@ class MenuNavbar {
 const List<MenuNavbar> allDestinations = <MenuNavbar>[
   MenuNavbar('Home', Icons.home_outlined),
   MenuNavbar('History', Icons.access_time),
+  MenuNavbar('Penjualan', Icons.monetization_on_outlined),
   MenuNavbar('Akun Saya', Icons.account_box_outlined)
 ];

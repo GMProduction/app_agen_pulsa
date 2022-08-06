@@ -130,8 +130,8 @@ class _DetailPageState extends State<DetailPage> {
                   readytoHit ? GenButton(
                     text: "Beli Sekarang",
                     ontap: () {
-                      // postDataBarang(id, qty);
-                      Navigator.pushNamed(context, "pembayaran");
+                      postDataBarang(id, stock);
+                      // Navigator.pushNamed(context, "buktitransfer");
                     },
                   ) : Center(child: CircularProgressIndicator(),)
                 ],
@@ -143,29 +143,24 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  // void postDataBarang(barangid, qty) async {
-  //   setState(() {
-  //     readytoHit = false;
-  //   });
-  //
-  //   if(stock < qty){
-  //     toastShow("Stock tidak cukup", context, Colors.black);
-  //     setState(() {
-  //       readytoHit = true;
-  //     });
-  //   }else{
-  //     dataBarang = await req.postApi("cart", {"barang_id": barangid, "qty": qty});
-  //     if(dataBarang == "berhasil"){
-  //       toastShow("barang berhasil masuk keranjang ", context, Colors.black);
-  //       Navigator.pushNamed(context, "keranjang");
-  //     }else{
-  //       toastShow("Barang  gagal dimasukan keranjang", context, Colors.black);
-  //       setState(() {
-  //         readytoHit = true;
-  //       });
-  //     }
-  //
-  //     print("DATA $dataBarang");
-  //   }
-  // }
+  void postDataBarang(barangid, harga) async {
+    setState(() {
+      readytoHit = false;
+    });
+
+
+      dataBarang = await req.postApi("transaksi", {"produk_id": barangid, "harga": harga});
+      if(dataBarang == "berhasil"){
+        print("data berhasil : "+dataBarang.toString());
+        toastShow("produk berhasil dibeli, silahkan masukan pembayaran", context, Colors.black);
+        Navigator.pushNamed(context, "buktitransfer");
+      }else{
+        toastShow("produk tidak bisa dibeli, silahkan hubungi admin", context, Colors.black);
+        setState(() {
+          readytoHit = true;
+        });
+
+      print("DATA $dataBarang");
+    }
+  }
 }

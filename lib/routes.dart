@@ -1,8 +1,9 @@
 
 import 'package:agen_pulsa/page/Login.dart';
 import 'package:agen_pulsa/page/base.dart';
+import 'package:agen_pulsa/page/buktitransfer.dart';
 import 'package:agen_pulsa/page/detailPage.dart';
-import 'package:agen_pulsa/page/keranjangPage.dart';
+import 'package:agen_pulsa/page/penjualanPulsa.dart';
 import 'package:agen_pulsa/page/splashScreen.dart';
 import 'package:agen_pulsa/page/suksesPesan.dart';
 import 'package:agen_pulsa/page/welcomePage.dart';
@@ -23,13 +24,13 @@ class GenProvider {
 //        return Base();
 //      },
 
-      // '/': (context) {
-      //   return SplashScreen();
-      // },
-
       '/': (context) {
-        return Base();
+        return SplashScreen();
       },
+
+      // '/': (context) {
+      //   return Base();
+      // },
 
       'welcome': (context) {
         return WelcomePage();
@@ -44,11 +45,15 @@ class GenProvider {
       },
 
       'keranjang': (context) {
-        return KeranjangPage();
+        return PenjualanPage();
       },
 
       'suksespesan': (context) {
         return SuksesPesanPage();
+      },
+
+      'buktitransfer': (context) {
+        return BuktiTransfer();
       },
 
       'login': (context) {

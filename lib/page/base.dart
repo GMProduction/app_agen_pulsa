@@ -1,4 +1,5 @@
-import 'package:agen_pulsa/page/prosesPage.dart';
+import 'package:agen_pulsa/page/history.dart';
+import 'package:agen_pulsa/page/penjualanPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,8 @@ class _BaseState extends State<Base> {
 
   final _widgetOptions = [
     HomePage(),
-    ProsesPage(),
+    HistoryPage(),
+    Penjualan(),
     AkunSaya()
   ];
 

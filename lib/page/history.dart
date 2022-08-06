@@ -1,4 +1,3 @@
-import 'package:agen_pulsa/genosLib/component/commonPadding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,22 +10,22 @@ import '../genosLib/genText.dart';
 import '../genosLib/request.dart';
 import 'detailPage.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HistoryPage> createState() => _HistoryPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HistoryPageState extends State<HistoryPage> {
   final req = new GenRequest();
   var dataBarang;
   bool isLoaded = false;
 
 
   List pulsa = [
-    {"id": 1,"nama": "paket tri Rp 200.000", "harga":180000, "provider": "three", "gambar" : "https://tri.co.id/image/files/20190309_turunan-super-website-desktop-ind.jpg"},
-    {"id": 2,"nama": "paket tri Rp 300.000", "harga":270000, "provider": "three", "gambar" : "https://tri.co.id/image/files/20190309_turunan-super-website-desktop-ind.jpg"}];
+    {"id": 1,"nama": "paket tri Rp 200.000", "tanggal" : "2022-08-06","harga":180000, "provider": "three", "gambar" : "https://tri.co.id/image/files/20190309_turunan-super-website-desktop-ind.jpg"},
+    {"id": 2,"nama": "paket tri Rp 300.000", "tanggal" : "2022-08-07","harga":270000, "provider": "three", "gambar" : "https://tri.co.id/image/files/20190309_turunan-super-website-desktop-ind.jpg"}];
   @override
   void initState() {
     // TODO: implement initState
@@ -42,18 +41,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Container(
-                  width: 100,
-                  height: 100,
-                  child: Center(
-                      child: InkWell(
-                          onTap: () {
-                            // Navigator.pushNamed(context, "login");
-                          },
-                          child: Image.asset(
-                            "assets/icons/menu_icon.png",
-                            color: Colors.black87,
-                          )))),
+
               Container(
                   width: 80,
                   height: 80,
@@ -80,25 +68,9 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CommonPadding(
-                child: GenCard(padding: EdgeInsets.all(20),width: double.infinity,child:
-                  Row(mainAxisAlignment: MainAxisAlignment.start,children: [
-                    Image.network("https://cdn-icons-png.flaticon.com/128/3135/3135715.png", width: 50),
-                    SizedBox(width: 20,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GenText("Agen 1", style: TextStyle( fontSize: 15),),
-                        GenText("Saldo : Rp 500.000", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
-                      ],
-                    )
-                  ],)
-                  ,),
-              ),
-              SizedBox(height: 50,),
               RowSpaceBetween(
                 chilidLeft: GenText(
-                  "Produk yang tersedia",
+                  "Riwayat Pembelian",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 childRight: InkWell(
@@ -129,6 +101,7 @@ class _HomePageState extends State<HomePage> {
                                 ));
                           },
                           judul: e["nama_produk"],
+                          isi: e["tanggal"],
                           harga: "Harga: " + e["harga"].toString(),
                           gambar: ip + e["gambar"],
                           // gambar: e["gambar"],
@@ -146,7 +119,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getDataBarang() async {
-    dataBarang = await req.getApi("produk/produks");
+    dataBarang = await req.getApi("transaksi/history");
 
     print("DATA $dataBarang");
 

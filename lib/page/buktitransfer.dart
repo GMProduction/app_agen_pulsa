@@ -14,14 +14,14 @@ import '../genosLib/genText.dart';
 import '../genosLib/genToast.dart';
 import '../genosLib/request.dart';
 
-class MasukanKeluhan extends StatefulWidget {
-  const MasukanKeluhan({Key? key}) : super(key: key);
+class BuktiTransfer extends StatefulWidget {
+  const BuktiTransfer({Key? key}) : super(key: key);
 
   @override
-  State<MasukanKeluhan> createState() => _MasukanKeluhanState();
+  State<BuktiTransfer> createState() => _BuktiTransferState();
 }
 
-class _MasukanKeluhanState extends State<MasukanKeluhan> {
+class _BuktiTransferState extends State<BuktiTransfer> {
 
   XFile? _image;
   final _picker = ImagePicker();
@@ -118,9 +118,13 @@ class _MasukanKeluhanState extends State<MasukanKeluhan> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 50,
+                    ),
                     CommonPadding(
                       child: Row(
                         children: [
+
                           FloatingActionButton(
                             mini: true,
                             child: Icon(Icons.camera_alt),
@@ -132,7 +136,7 @@ class _MasukanKeluhanState extends State<MasukanKeluhan> {
                             width: 10,
                           ),
                           GenText(
-                            "Masukan Foto Keluhan",
+                            "Masukan Bukti Transfer",
                             style: TextStyle(color: Colors.black45),
                           )
                         ],
@@ -142,21 +146,20 @@ class _MasukanKeluhanState extends State<MasukanKeluhan> {
                       height: 20,
                     ),
                     _image == null
-                        ? Container(
+                        ? Center(
+                          child: Container(
                       width: 0,
                       height: 0,
-                    )
-                        : Image.file(
+                    ),
+                        )
+                        : Center(
+                          child: Image.file(
                       File(_image!.path),
-                      width: 150,
+                      width: 300,
                       fit: BoxFit.fitWidth,
                     ),
-                    CommonPadding(
-                      child: TextLoginField(
-                        onChanged: (val){ deskripsi = val;},
-                        label: "Keterangan",
-                      ),
-                    )
+                        ),
+
                   ],
                 ),
               ),
@@ -172,7 +175,8 @@ class _MasukanKeluhanState extends State<MasukanKeluhan> {
                   !readyToHit ? Center(child: CircularProgressIndicator(),) :  GenButton(
                     text: "Submit",
                     ontap: () {
-                      MasukanKeluhan(_image);
+                      // MasukanKeluhan(_image);
+                      Navigator.pushNamed(context, "home");
                     },
                   ),
                 ],
@@ -185,7 +189,7 @@ class _MasukanKeluhanState extends State<MasukanKeluhan> {
   }
 
 
-  void MasukanKeluhan(gambar1) async {
+  void MasukanKeluhan(id,gambar1) async {
 
     setState(() {
       readyToHit = false;
@@ -195,10 +199,9 @@ class _MasukanKeluhanState extends State<MasukanKeluhan> {
 
     if(deskripsi != null){
       dataKeluhan = await req
-          .postApiAuth("keluhan",
+          .postApiAuth("transaksi/bukti/"+id,
           {
             "gambar": await MultipartFile.fromFile(gambar1.path, filename: fileName),
-            "deskripsi": deskripsi,
           });
 
       print(dataKeluhan);

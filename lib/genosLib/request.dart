@@ -5,7 +5,7 @@ import 'database/genPreferrence.dart';
 
 
 
-String ip = "http://192.168.43.65:8000";
+String ip = "http://192.168.137.1:8000";
 
 
 getIp() {

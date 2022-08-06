@@ -61,9 +61,9 @@ class _SuksesPesanPageState extends State<SuksesPesanPage> {
                 child: Column(
                   children: [
                     Image.asset("assets/images/diproses.jpg", height: 300,),
-                    GenText("Pesananmu Segera Diproses", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    GenText("Pulsa akan segera dikirm", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
                     SizedBox(height: 10,),
-                    GenText("Mohon tunggu konfirmasi dari kami..."),
+                    GenText("Silahkan konfirmasi ke pelanggan..."),
                   ],
                 ),
               ),

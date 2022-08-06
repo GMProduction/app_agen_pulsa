@@ -1,5 +1,4 @@
-import 'package:card_swiper/card_swiper.dart';
-import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
+import 'package:agen_pulsa/genosLib/component/commonPadding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -8,21 +7,19 @@ import '../genosLib/JustHelper.dart';
 import '../genosLib/component/card/genCard.dart';
 import '../genosLib/component/etc/genDimen.dart';
 import '../genosLib/component/etc/genRow.dart';
-import '../genosLib/component/etc/genShadow.dart';
 import '../genosLib/component/page/genPage.dart';
 import '../genosLib/genColor.dart';
 import '../genosLib/genText.dart';
 import '../genosLib/request.dart';
-import 'menuNavbar.dart';
 
-class ProsesPage extends StatefulWidget {
-  const ProsesPage({Key? key}) : super(key: key);
+class Penjualan extends StatefulWidget {
+  const Penjualan({Key? key}) : super(key: key);
 
   @override
-  State<ProsesPage> createState() => _ProsesPageState();
+  State<Penjualan> createState() => _PenjualanState();
 }
 
-class _ProsesPageState extends State<ProsesPage> {
+class _PenjualanState extends State<Penjualan> {
   final req = new GenRequest();
   List? dataTransaksi;
 
@@ -43,18 +40,7 @@ class _ProsesPageState extends State<ProsesPage> {
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Container(
-                  width: 100,
-                  height: 100,
-                  child: Center(
-                      child: InkWell(
-                          onTap: () {
-                            // Navigator.of(context).pop();
-                          },
-                          child: Image.asset(
-                            "assets/icons/menu_icon.png",
-                            color: Colors.black87,
-                          )))),
+
               Container(
                   width: 80,
                   height: 80,
@@ -83,7 +69,7 @@ class _ProsesPageState extends State<ProsesPage> {
             children: [
               RowSpaceBetween(
                 chilidLeft: GenText(
-                  "Pesanan anda yang masih di proses",
+                  "Riwayat Penjualan",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 childRight: InkWell(
@@ -101,10 +87,23 @@ class _ProsesPageState extends State<ProsesPage> {
               Column(
                   children: dataTransaksi == null
                       ? [
-                          Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        ]
+                    CommonPadding(
+                      child: GenCard(
+                        padding: EdgeInsets.all(10),
+                        width: double.infinity,
+                        child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GenText("Tanggal : 6 Agustus 2022"),
+                            SizedBox(height: 5,),
+                            GenText("Nomor hp : 08715487415"),
+                            SizedBox(height: 5,),
+                            GenText("Nominal : Rp 50.000"),
+                          ],
+                        ),
+                      ),
+                    )
+                  ]
                       : dataTransaksi!.map<Widget>((e) {
                           return GenCardOrder(
                             isi: e["keranjang"]["cart"],

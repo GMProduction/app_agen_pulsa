@@ -1,3 +1,4 @@
+import 'package:agen_pulsa/genosLib/component/commonPadding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -10,14 +11,14 @@ import '../genosLib/genText.dart';
 import '../genosLib/genToast.dart';
 import '../genosLib/request.dart';
 
-class KeranjangPage extends StatefulWidget {
-  const KeranjangPage({Key? key}) : super(key: key);
+class PenjualanPage extends StatefulWidget {
+  const PenjualanPage({Key? key}) : super(key: key);
 
   @override
-  State<KeranjangPage> createState() => _KeranjangPageState();
+  State<PenjualanPage> createState() => _PenjualanPageState();
 }
 
-class _KeranjangPageState extends State<KeranjangPage> {
+class _PenjualanPageState extends State<PenjualanPage> {
   final req = new GenRequest();
   var dataBarang;
   bool isLoaded = false;
@@ -62,7 +63,7 @@ class _KeranjangPageState extends State<KeranjangPage> {
                             // Navigator.of(context).pop();
                           },
                           child: GenText(
-                            "Keranjang Pesanan",
+                            "Penjualan",
                             style: TextStyle(fontSize: 20),
                           ))),
                   // GenText(
@@ -78,17 +79,14 @@ class _KeranjangPageState extends State<KeranjangPage> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  children: dataBarang == null
-                      ? [Center(child: CircularProgressIndicator())]
-                      : dataBarang.map<Widget>((e) {
-                          return GenCardArtikel(
-                            ontap: () {},
-                            judul: e["barang"]["nama_barang"],
-                            harga: "Stock: " + e["qty"].toString(),
-                            gambar: ip + e["barang"]["foto"],
-                          );
-                        }).toList(),
+                child: CommonPadding(child: Column(
+                  children: [
+                    SizedBox(height: 20,),
+                    TextLoginField(label: "Nomor HP",),
+                    SizedBox(height: 20,),
+                    TextLoginField(label: "Nominal",),
+                  ],
+                ),
                 ),
               ),
             ),
@@ -108,17 +106,12 @@ class _KeranjangPageState extends State<KeranjangPage> {
                   // SizedBox(
                   //   height: 10,
                   // ),
-                  GenButtonOutline(
-                    text: "Pesan Barang Lainya",
-                    ontap: () {
-                      Navigator.pushNamed(context, "home");
-                    },
-                  ),
+
                   SizedBox(
                     height: 10,
                   ),
                   GenButton(
-                    text: "Proses Pesanan",
+                    text: "Kirim",
                     ontap: () {
                       showModalBottomSheet<void>(
                         isScrollControlled: true,
@@ -137,17 +130,13 @@ class _KeranjangPageState extends State<KeranjangPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      TextLoginField(
-                                          label: "Masukan Keterangan",
-                                          onChanged: (val) {
-                                            keterangan = val;
-                                          }),
+                                      GenText("Apa anda yakin ?"),
                                       SizedBox(
                                         height: 20,
                                       ),
                                       readytoHit
                                           ? GenButton(
-                                              text: "Proses Pesanan",
+                                              text: "Proses Penjualan",
                                               ontap: () {
                                                 prosesKeranjang(keterangan);
                                               },
@@ -186,7 +175,8 @@ class _KeranjangPageState extends State<KeranjangPage> {
 
 
     if (keterangan == "") {
-      toastShow("Masukan keterangan", context, Colors.black);
+      toastShow("Pulsa Berhasil dikirim", context, Colors.black);
+      Navigator.pushNamed(context, "suksespesan");
 
 
     } else {
@@ -196,7 +186,6 @@ class _KeranjangPageState extends State<KeranjangPage> {
 
       var dataProses = await req.postApi("cart/checkout", {"keterangan": keterangan});
       if (dataProses == "Berhasil") {
-        Navigator.pushNamed(context, "suksespesan");
 
       } else {
         // toastShow("Barang  gagal dimasukan keranjang", context, Colors.black);
