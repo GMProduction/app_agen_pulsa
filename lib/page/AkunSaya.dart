@@ -30,6 +30,7 @@ class _AkunSayaState extends State<AkunSaya> {
   var nama = "";
   var alamat = "-";
   var no_hp = "-";
+  var saldo = "-";
 
   @override
   void initState() {
@@ -112,7 +113,7 @@ class _AkunSayaState extends State<AkunSaya> {
                 initVal: no_hp,
                 width: double.infinity,
                 label: "No. HP",
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
 //                                    controller: tecNumber,
                 onChanged: (val) {
                   no_hp = val;
@@ -120,6 +121,26 @@ class _AkunSayaState extends State<AkunSaya> {
                 validator: (val) {
                   if (val.length < 1) {
                     return "Isi No HP";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextLoginField(
+                initVal: saldo,
+                width: double.infinity,
+                label: "Saldo",
+                keyboardType: TextInputType.text,
+//                                    controller: tecNumber,
+                onChanged: (val) {
+                  saldo = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return "";
                   } else {
                     return null;
                   }
@@ -167,8 +188,9 @@ class _AkunSayaState extends State<AkunSaya> {
 
 
     nama = dataProfil["nama"];
-    // alamat = dataProfil["alamat"];
-    // no_hp = dataProfil["no_hp"];
+    alamat = dataProfil["agen"]["alamat"];
+    no_hp = dataProfil["agen"]["no_hp"];
+    saldo = dataProfil["agen"]["saldo"].toString();
 
     setState(() {});
   }

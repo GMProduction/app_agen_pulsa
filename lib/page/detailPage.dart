@@ -153,7 +153,7 @@ class _DetailPageState extends State<DetailPage> {
       if(dataBarang == "berhasil"){
         print("data berhasil : "+dataBarang.toString());
         toastShow("produk berhasil dibeli, silahkan masukan pembayaran", context, Colors.black);
-        Navigator.pushNamed(context, "buktitransfer");
+        Navigator.pushReplacementNamed(context, "history");
       }else{
         toastShow("produk tidak bisa dibeli, silahkan hubungi admin", context, Colors.black);
         setState(() {

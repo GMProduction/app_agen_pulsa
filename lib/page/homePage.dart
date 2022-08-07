@@ -2,6 +2,7 @@ import 'package:agen_pulsa/genosLib/component/commonPadding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../genosLib/JustHelper.dart';
 import '../genosLib/component/card/genCard.dart';
 import '../genosLib/component/etc/genDimen.dart';
 import '../genosLib/component/etc/genRow.dart';
@@ -22,7 +23,9 @@ class _HomePageState extends State<HomePage> {
   final req = new GenRequest();
   var dataBarang;
   bool isLoaded = false;
-
+  var nama = "-";
+  var saldo = "0";
+  var dataProfil;
 
   List pulsa = [
     {"id": 1,"nama": "paket tri Rp 200.000", "harga":180000, "provider": "three", "gambar" : "https://tri.co.id/image/files/20190309_turunan-super-website-desktop-ind.jpg"},
@@ -30,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+    getProfile();
     getDataBarang();
     super.initState();
   }
@@ -88,8 +92,8 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GenText("Agen 1", style: TextStyle( fontSize: 15),),
-                        GenText("Saldo : Rp 500.000", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                        GenText(nama, style: TextStyle( fontSize: 15),),
+                        GenText("Saldo : "+formatRupiahUseprefik(saldo), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
                       ],
                     )
                   ],)
@@ -129,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                                 ));
                           },
                           judul: e["nama_produk"],
-                          harga: "Harga: " + e["harga"].toString(),
+                          harga: "Harga: " + formatRupiahUseprefik(e["harga"].toString()),
                           gambar: ip + e["gambar"],
                           // gambar: e["gambar"],
                         );
@@ -149,6 +153,17 @@ class _HomePageState extends State<HomePage> {
     dataBarang = await req.getApi("produk/produks");
 
     print("DATA $dataBarang");
+
+    setState(() {});
+  }
+
+  void getProfile() async {
+    dataProfil = await req.getApi("profile");
+    print("DATA $dataProfil");
+
+
+    nama = dataProfil["nama"];
+    saldo = dataProfil["agen"]["saldo"].toString();
 
     setState(() {});
   }

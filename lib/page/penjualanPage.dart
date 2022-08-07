@@ -86,33 +86,23 @@ class _PenjualanState extends State<Penjualan> {
               ),
               Column(
                   children: dataTransaksi == null
-                      ? [
-                    CommonPadding(
-                      child: GenCard(
-                        padding: EdgeInsets.all(10),
-                        width: double.infinity,
-                        child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GenText("Tanggal : 6 Agustus 2022"),
-                            SizedBox(height: 5,),
-                            GenText("Nomor hp : 08715487415"),
-                            SizedBox(height: 5,),
-                            GenText("Nominal : Rp 50.000"),
-                          ],
-                        ),
-                      ),
-                    )
-                  ]
+                      ? [Center(child: CircularProgressIndicator())]
                       : dataTransaksi!.map<Widget>((e) {
-                          return GenCardOrder(
-                            isi: e["keranjang"]["cart"],
-                            nomor: e["id"].toString(),
-                            tanggal: e["tanggal"],
-                            status: statusTrans(e["status"]),
-                            ontap: () {
-                              Navigator.pushNamed(context, "detail");
-                            },
+                          return CommonPadding(
+                            child: GenCard(
+                              padding: EdgeInsets.all(10),
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GenText("Tanggal : "+formatTanggalFromStringGMT(e["created_at"])),
+                                  SizedBox(height: 5,),
+                                  GenText("Nomor hp : "+e["no_hp"]),
+                                  SizedBox(height: 5,),
+                                  GenText("Nominal : "+ formatRupiahUseprefik(e["nominal"].toString())),
+                                ],
+                              ),
+                            ),
                           );
                         }).toList()),
               SizedBox(
@@ -126,23 +116,22 @@ class _PenjualanState extends State<Penjualan> {
   }
 
   void getDataTransaksi() async {
-    var data = await req.getApi("transaction");
+    dataTransaksi = await req.getApi("penjualan");
     print("DATA tra $dataTransaksi");
-    dataTransaksi = [];
+    // dataTransaksi = [];
 
-    if (data.length > 0) {
-      for (var i = 0; i < data.length; i++) {
-        Map mapdata = data[i];
-        var dataKeranjang =
-            await req.getApi("transaction/" + mapdata["id"].toString());
-        mapdata["keranjang"] = dataKeranjang;
+    // if (data.length > 0) {
+    //   for (var i = 0; i < data.length; i++) {
+    //     Map mapdata = data[i];
+    //     var dataKeranjang =
+    //         await req.getApi("transaction/" + mapdata["id"].toString());
+    //     mapdata["keranjang"] = dataKeranjang;
+    //
+    //     dataTransaksi!.add(mapdata);
+    //   }
+    // }
 
-        dataTransaksi!.add(mapdata);
-      }
-    }
-
-    var logger = Logger();
-    logger.i("DATA LOG " + dataTransaksi![0]["keranjang"].toString());
+    // logger.i("DATA LOG " + dataTransaksi![0]["keranjang"].toString());
     setState(() {});
   }
 }

@@ -1,8 +1,10 @@
 
+
 import 'package:agen_pulsa/page/Login.dart';
 import 'package:agen_pulsa/page/base.dart';
 import 'package:agen_pulsa/page/buktitransfer.dart';
 import 'package:agen_pulsa/page/detailPage.dart';
+import 'package:agen_pulsa/page/history.dart';
 import 'package:agen_pulsa/page/penjualanPulsa.dart';
 import 'package:agen_pulsa/page/splashScreen.dart';
 import 'package:agen_pulsa/page/suksesPesan.dart';
@@ -58,6 +60,10 @@ class GenProvider {
 
       'login': (context) {
         return LoginPage();
+      },
+
+      'history': (context) {
+        return HistoryPage();
       },
 
     };

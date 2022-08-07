@@ -1,3 +1,5 @@
+import 'package:agen_pulsa/genosLib/JustHelper.dart';
+import 'package:agen_pulsa/page/buktitransfer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,7 @@ import '../genosLib/component/etc/genRow.dart';
 import '../genosLib/component/page/genPage.dart';
 import '../genosLib/genColor.dart';
 import '../genosLib/genText.dart';
+import '../genosLib/genToast.dart';
 import '../genosLib/request.dart';
 import 'detailPage.dart';
 
@@ -89,21 +92,25 @@ class _HistoryPageState extends State<HistoryPage> {
                 children: dataBarang == null
                     ? [Center(child: CircularProgressIndicator())]
                     : dataBarang.map<Widget>((e) {
+
+                  var status = e["status"] == 0 ? "(Menunggu)" : e["status"] == 1 ? "(Diterima)":"(Ditolak)";
+
                         return GenCardArtikel(
                           ontap: () {
-                            Navigator.pushNamed(context, "detail",
-                                arguments: DetailPage(
-                                  id: e["id"],
-                                  foto: ip + e["gambar"],
-                                  // foto: e["gambar"],
-                                  nama: e["nama_produk"],
-                                  qty: e["harga"],
-                                ));
+                            if(e["bukti_pembayaran"] == null ){
+                              Navigator.pushNamed(context, "buktitransfer",
+                                  arguments: BuktiTransfer(
+                                    id: e["id"],
+                                  ));
+                            }else{
+                              toastShow("permintaanmu sudah diproses", context, Colors.black);
+                            }
+
                           },
-                          judul: e["nama_produk"],
+                          judul: e["produk"]["nama_produk"] + " " +status,
                           isi: e["tanggal"],
-                          harga: "Harga: " + e["harga"].toString(),
-                          gambar: ip + e["gambar"],
+                          harga: "Harga: " + formatRupiahUseprefik(e["harga"].toString()),
+                          gambar: ip + e["produk"]["gambar"],
                           // gambar: e["gambar"],
                         );
                       }).toList(),
@@ -119,7 +126,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   void getDataBarang() async {
-    dataBarang = await req.getApi("transaksi/history");
+    dataBarang = await req.getApi("transaksi");
 
     print("DATA $dataBarang");
 

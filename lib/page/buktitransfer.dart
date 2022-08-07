@@ -15,7 +15,8 @@ import '../genosLib/genToast.dart';
 import '../genosLib/request.dart';
 
 class BuktiTransfer extends StatefulWidget {
-  const BuktiTransfer({Key? key}) : super(key: key);
+  int? id;
+  BuktiTransfer({this.id});
 
   @override
   State<BuktiTransfer> createState() => _BuktiTransferState();
@@ -65,11 +66,16 @@ class _BuktiTransferState extends State<BuktiTransfer> {
 
 
   final req = new GenRequest();
-  var dataKeluhan, deskripsi;
+  var dataBukti, deskripsi;
   bool loaded = false;
+  var id;
 
   @override
   Widget build(BuildContext context) {
+
+    final args = ModalRoute.of(context)!.settings.arguments as BuktiTransfer;
+    id = args.id;
+
     return GenPage(
       appbar: Container(
         width: double.infinity,
@@ -175,8 +181,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
                   !readyToHit ? Center(child: CircularProgressIndicator(),) :  GenButton(
                     text: "Submit",
                     ontap: () {
-                      // MasukanKeluhan(_image);
-                      Navigator.pushNamed(context, "home");
+                      MasukanBuktiTf(id, _image);
                     },
                   ),
                 ],
@@ -189,7 +194,7 @@ class _BuktiTransferState extends State<BuktiTransfer> {
   }
 
 
-  void MasukanKeluhan(id,gambar1) async {
+  void MasukanBuktiTf(id,gambar1) async {
 
     setState(() {
       readyToHit = false;
@@ -197,20 +202,23 @@ class _BuktiTransferState extends State<BuktiTransfer> {
 
     String fileName = gambar1.path.split('/').last;
 
-    if(deskripsi != null){
-      dataKeluhan = await req
-          .postApiAuth("transaksi/bukti/"+id,
+    if(gambar1 != null){
+      dataBukti = await req
+          .postApiAuth("transaksi/bukti/"+id.toString(),
           {
-            "gambar": await MultipartFile.fromFile(gambar1.path, filename: fileName),
+            "bukti": await MultipartFile.fromFile(gambar1.path, filename: fileName),
           });
 
-      print(dataKeluhan);
+      print(dataBukti);
 
-      if(dataKeluhan["status"] == 200){
-        toastShow("Keluhan berhasil di upload", context, Colors.black);
+      if(dataBukti == "berhasil"){
+        toastShow("Bukti transfer berhasil dikirim", context, Colors.black);
         Navigator.popAndPushNamed(context, "home");
       }else{
-        toastShow("Username / Password salah", context, Colors.black);
+        setState(() {
+          readyToHit = true;
+        });
+        toastShow("Kesalahan pada server", context, Colors.black);
       }
 
 
@@ -221,11 +229,11 @@ class _BuktiTransferState extends State<BuktiTransfer> {
       setState(() {
         readyToHit = true;
       });
-      toastShow("Deskripsi belum diisi", context, Colors.black);
+      toastShow("periksa lagi bukti transfermu", context, Colors.black);
     }
 
-    print("DATA $dataKeluhan");
-    print("length" + dataKeluhan.length.toString());
+    print("DATA $dataBukti");
+    print("length" + dataBukti.length.toString());
   }
 
 }

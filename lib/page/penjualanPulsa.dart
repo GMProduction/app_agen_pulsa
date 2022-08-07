@@ -23,11 +23,14 @@ class _PenjualanPageState extends State<PenjualanPage> {
   var dataBarang;
   bool isLoaded = false;
   bool readytoHit = true;
-  var keterangan = "";
+  var nohp, nominal;
+  var dataProfil;
+  String saldo = "0";
 
   @override
   void initState() {
     // TODO: implement initState
+    getProfile();
     getDataKeranjang();
     super.initState();
   }
@@ -82,9 +85,9 @@ class _PenjualanPageState extends State<PenjualanPage> {
                 child: CommonPadding(child: Column(
                   children: [
                     SizedBox(height: 20,),
-                    TextLoginField(label: "Nomor HP",),
+                    TextLoginField(onChanged: (val){ nohp = val;},label: "Nomor HP",),
                     SizedBox(height: 20,),
-                    TextLoginField(label: "Nominal",),
+                    TextLoginField(onChanged: (val){ nominal = val;},label: "Nominal",),
                   ],
                 ),
                 ),
@@ -138,7 +141,7 @@ class _PenjualanPageState extends State<PenjualanPage> {
                                           ? GenButton(
                                               text: "Proses Penjualan",
                                               ontap: () {
-                                                prosesKeranjang(keterangan);
+                                                prosesKeranjang(nohp, nominal);
                                               },
                                             )
                                           : Center(
@@ -171,32 +174,53 @@ class _PenjualanPageState extends State<PenjualanPage> {
     setState(() {});
   }
 
-  void prosesKeranjang(keterangan) async {
+  void prosesKeranjang(nohp, nominal) async {
 
 
-    if (keterangan == "") {
-      toastShow("Pulsa Berhasil dikirim", context, Colors.black);
-      Navigator.pushNamed(context, "suksespesan");
+    if (nohp == null || nominal == null) {
+      toastShow("Isi nomor hp dan nominal", context, Colors.black);
+
+
 
 
     } else {
-      setState(() {
-        readytoHit = false;
-      });
+      int isaldo = int.parse(saldo);
+      int inominal = int.parse(nominal);
 
-      var dataProses = await req.postApi("cart/checkout", {"keterangan": keterangan});
-      if (dataProses == "Berhasil") {
-
-      } else {
-        // toastShow("Barang  gagal dimasukan keranjang", context, Colors.black);
-        toastShow("Keranjang gagal di proses", context, Colors.black);
-
+      if(inominal > isaldo){
+        toastShow("Saldo tidak cukup", context, Colors.black);
+      }else{
         setState(() {
-          readytoHit = true;
+          readytoHit = false;
         });
 
-        print("DATA $dataProses");
+        var dataProses = await req.postApi("penjualan", {"no_hp": nohp, "nominal": nominal});
+        if (dataProses == "berhasil") {
+          toastShow("Pulsa Berhasil dikirim", context, Colors.black);
+          Navigator.pushNamed(context, "suksespesan");
+        } else {
+          // toastShow("Barang  gagal dimasukan keranjang", context, Colors.black);
+          toastShow("Keranjang gagal di proses", context, Colors.black);
+
+          setState(() {
+            readytoHit = true;
+          });
+
+          print("DATA $dataProses");
+        }
       }
+
+
     }
+  }
+
+  void getProfile() async {
+    dataProfil = await req.getApi("profile");
+    print("DATA $dataProfil");
+
+
+    saldo = dataProfil["agen"]["saldo"].toString();
+
+    setState(() {});
   }
 }
